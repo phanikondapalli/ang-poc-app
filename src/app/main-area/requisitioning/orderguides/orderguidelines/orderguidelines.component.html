@@ -1,0 +1,115 @@
+<p-tabView>
+        <p-tabPanel header="Order Guide Details">        
+                <app-order-guide-details  *ngIf="currentOrderGuide" [orderGuide]="currentOrderGuide" action="edit" #ogDetails>                                       
+                </app-order-guide-details>
+        </p-tabPanel>
+        <p-tabPanel header="Order Guide Lines">
+            <div class="container-fluid">                                                    
+                    <div class="row py-1">
+                            <div class="col-md-12">
+                                <span class="pr-5 text-align-bottom">Showing {{totalOrderGuideLinesCount}} lines</span>                  
+                            </div>                    
+                    </div>
+<p-growl [(value)]="msgs" [immutable]="false"></p-growl>                    
+<p-growl [(value)]="availableItems.msgs" [immutable]="false"></p-growl>
+<!-- Order Guide lines Start -->             
+<ng-container *ngIf="orderGuideLines.length==0">
+        <div class="alert alert-info" role="alert">
+            OrderGuide <strong> {{currentOrderGuide.orderGuide}} </strong> doesnt have any lines. Please select items below to add lines.
+        </div>
+</ng-container>
+<p-table #dt [columns]="cols" [value]="orderGuideLines" [resizableColumns]="true" [paginator]="true" [rows]="5"
+             [totalRecords]="totalOrderGuideLinesCount" [lazy]="true" (onLazyLoad)="lazyLoadOrderGuideLines($event)" 
+             [loading]="loading" (onEditComplete)="editLine($event)">             
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <ng-container *ngFor="let col of columns">
+                            <ng-container *ngIf="col.field=='id';else unSorted">
+                                <th pResizableColumn [pSortableColumn]="col.field">
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+                            </ng-container>
+                            <ng-template #unSorted>
+                                <th pResizableColumn>
+                                    {{col.header}}
+                                </th>
+                            </ng-template>
+                        </ng-container>
+                    </tr>                    
+                </ng-template>                                
+                <ng-template pTemplate="body" let-orderGuideLine let-i="rowIndex" let-columns="columns">
+                    <tr>                  
+                        <td class="ui-resizable-column">{{orderGuideLine.itemNo}}</td>
+                        <td class="ui-resizable-column">
+                            <ng-container *ngIf="orderGuideLine.itemPicURL; else noImage">
+                                <img class="img-fluid img-thumbnail" style="max-height:80px;" [src]="orderGuideLine.itemPicURL" />
+                            </ng-container>
+                            <ng-template #noImage>
+                                <img class="img-fluid img-thumbnail" style="max-height:80px;" src="../../../../assets/no_image_icon.jpg" />
+                            </ng-template>
+                        </td>
+                        <td class="ui-resizable-column">{{orderGuideLine.mfrItemNo}}</td>
+                        <td class="ui-resizable-column">{{orderGuideLine.vendorItemNo}}</td>
+                        <td class="ui-resizable-column">{{orderGuideLine.itemDesc | lowercase}}</td>
+                       <!-- <td class="ui-resizable-column">{{orderGuideLine.unitOfMeasure}}</td> -->
+                        <td [pEditableColumn]="orderGuideLine" [pEditableColumnField]="'unitOfMeasure'" class="ui-resizable-column">                                
+                                <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <!-- <input type="text" [(ngModel)]="orderGuideLine.unitOfMeasure"> -->
+                                            <p-dropdown appendTo="body" [options]="uoms" [(ngModel)]="orderGuideLine.unitOfMeasure" [style]="{'width':'80%'}"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{orderGuideLine.unitOfMeasure}}
+                                        </ng-template>
+                                </p-cellEditor>
+                        </td>
+                        <td [pEditableColumn]="orderGuideLine" [pEditableColumnField]="'parLevelQty'" class="ui-resizable-column">                                
+                            <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" [(ngModel)]="orderGuideLine.parLevelQty">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{orderGuideLine.parLevelQty}}
+                                    </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td class="ui-resizable-column">{{orderGuideLine.estUnitCost}}</td>
+                        <td class="border-0 bg-white">                        
+                            <a title="delete line" class="text-secondary" (click)="confirm(orderGuideLine.itemNo,orderGuideLine.id)">
+                                <i class="fa fa-trash fa-lg"></i>
+                            </a>
+                        </td>                        
+                    </tr>                    
+                </ng-template>                                   
+            </p-table>
+    <!-- Order guide lines end -->
+
+    <!-- Delete line confirm dialog start -->
+    <p-confirmDialog header="Confirmation" appendTo="body" icon="fa fa-question-circle" width="425" #cd>
+            <p-footer>
+                <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+                <button type="button" pButton icon="fa-check" label="Yes" (click)="cd.accept()"></button>
+            </p-footer>
+    </p-confirmDialog>
+    <!-- Delete line confirm dialog end -->
+
+            <!-- Available items for add start -->
+            <div class="row pt-3 px-0">
+                    <div class="col-md-3">
+                        <h5 class="pt-1">Available items</h5>
+                    </div>                    
+            </div>
+            <div class="row py-1">
+                    <div class="col-md-12">
+                        <!-- <span class="pr-5 text-align-bottom">Showing {{availableItems.totalAvailableItemsCount}} items</span> -->
+                        <button (click)="availableItems.AddItemsToOrderGuide()" class="btn btn-sm btn-primary {{availableItems.enableAddBtn}}">Add Items</button>
+                    </div>                    
+            </div>
+            <app-available-items [orderGuideId]="currentOrderGuide && currentOrderGuide.orderGuide" #availableItems 
+                 (refresh)="refresh($event)"></app-available-items>
+
+        <!-- Available items for add end -->                 
+        </div>
+    </p-tabPanel>    
+</p-tabView>

@@ -1,0 +1,93 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-white">
+        <li class="breadcrumb-item">
+            <a [routerLink]="['']">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/requisitioning']">Requisitioning</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/requisitioning','requisitions']">Requisitions</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Requisition Lines</li>
+    </ol>
+</nav>
+<p-tabView>
+    <p-tabPanel header="Requisition Lines">
+        <div class="container-fluid">           
+                <div class="row pb-1">
+                    <div class="col-md-3">
+                        <h5 class="pt-1">Requisition Lines</h5>
+                    </div>
+                    <div class="col-md-9">
+                        <button class="btn btn-sm btn-primary">Add New Line</button>
+                    </div>
+                </div>            
+            <!-- Requisition lines listing start -->
+            <ng-container *ngIf="requisitionLines.length==0">
+                    <div class="alert alert-info" role="alert">
+                        Requisition <strong> {{requisitionNo}} </strong> doesnt have any lines. Please click Add New Line button to add lines.
+                    </div>
+            </ng-container>  
+            <p-table #dt [columns]="cols" [value]="requisitionLines" [resizableColumns]="true" [paginator]="true" [rows]="10" 
+            [totalRecords]="totalRequisitionLinesCount"
+                [lazy]="true" (onLazyLoad)="lazyLoadRequisitionLines($event)" [loading]="loading">
+
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <ng-container *ngFor="let col of columns">
+                            <ng-container *ngIf="col.field=='id';else unSorted">
+                                <th pResizableColumn [pSortableColumn]="col.field">
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+                            </ng-container>
+                            <ng-template #unSorted>
+                                <th pResizableColumn>
+                                    {{col.header}}
+                                </th>
+                            </ng-template>
+                        </ng-container>
+                    </tr>
+                    <!-- <tr>
+                  <th *ngFor="let col of columns">
+                      <div *ngIf="col.field==='id'" style="text-align: left">                          
+                          <input placeholder="Lookup" pInputText type="text" (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+                          <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                      </div>
+                  </th>                              
+              </tr> -->
+                </ng-template>
+                <ng-template pTemplate="body" let-requisitionLine let-columns="columns">
+                    <tr>
+                        <!-- <td *ngFor="let col of columns">
+                          {{orderGuide[col.field]}}
+                  </td> -->
+                        <td class="ui-resizable-column">{{requisitionLine.reqLineNo}}</td>
+                        <td class="ui-resizable-column">
+                            <ng-container *ngIf="requisitionLine.itemPicURL; else noImage">
+                                <img class="img-fluid" [src]="requisitionLine.itemPicURL" />
+                            </ng-container>
+                            <ng-template #noImage>
+                                <img class="img-fluid" src="../../../../assets/no_image_icon.jpg" />
+                            </ng-template>
+                        </td>
+                        <td class="ui-resizable-column">{{requisitionLine.vendorItemNo}}</td>
+                        <td class="ui-resizable-column">{{requisitionLine.description}}</td>
+                        <td class="ui-resizable-column">{{requisitionLine.issUOM}}</td>
+                        <td class="ui-resizable-column">{{requisitionLine.itemTypeDesc}}</td>
+                        <td class="border-0 bg-white">
+                            <a title="delete line" class="text-secondary" href="#">
+                                <i class="fa fa-trash fa-lg"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <!-- Requisition lines listing End -->
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Requisition Details">
+        Requisition Details Here...
+    </p-tabPanel>
+</p-tabView>

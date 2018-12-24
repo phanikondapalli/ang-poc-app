@@ -1,0 +1,46 @@
+tr:last-child > td{
+    border-bottom: none;
+}
+
+.ui-table-caption.ui-widget-header.ng-star-inserted{
+    padding:0 0 0.25em 0;
+    background: none;
+    border:none;
+    font-weight:normal;
+}
+
+.ui-table-loading.ui-widget-overlay.ng-star-inserted{
+    opacity: 0.3;
+}
+
+.ui-paginator-bottom{
+    border-top: 1px solid #d9d9d9 !important;
+}
+
+.ui-steps .ui-steps-item {
+    width: 25%;
+}
+
+.ui-steps.steps-custom {
+    margin-bottom: 30px;
+    padding:10px 0 40px 0;
+}
+    
+.ui-steps.steps-custom .ui-steps-item .ui-menuitem-link {
+    height: 10px;
+    padding: 0 1em;
+}
+    
+.ui-steps.steps-custom .ui-steps-item .ui-steps-number {
+    background-color: #0081c2;
+    color: #FFFFFF;
+    display: inline-block;
+    width: 42px;
+    border-radius: 50%;
+    margin-top: -14px;
+    margin-bottom: 10px;
+}
+
+.ui-steps.steps-custom .ui-steps-item .ui-steps-title {
+    color: #555555;
+}

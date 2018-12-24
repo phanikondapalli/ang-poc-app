@@ -1,0 +1,109 @@
+<header>
+  <nav class="navbar navbar-default navbar-expand-xl navbar-light">
+      <a class="navbar-brand" routerLink="/">
+          <img id="logoImg1" alt="PremierConnect" width="200" height="36" src="./assets/logo-premier-connect-white-1.png"> 
+      </a>
+     
+     <div class="collapse navbar-collapse justify-content-start">           
+            <ul class="nav navbar-nav navbar-right ml-auto">                                
+            <li dropdown class="nav-item">
+              <a dropdownToggle class="nav-link dropdown-toggle user-action text-light"><img src="./assets/profile.png" alt="avatar">
+                 <span id="userName">John Doe</span> <b class="caret"></b>
+              </a>
+              <ul *dropdownMenu class="dropdown-menu">
+                  <li><a routerLink="" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a></li>                  
+                  <li><a routerLink="" class="dropdown-item"> <i class="fa fa-sign-out"> </i>Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+     </div>
+    </nav>
+    <!-- Another nav spanning categories --> 
+    <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-light bg-light">            
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav mr-auto">
+                            <li dropdown class="nav-item">
+                                    <a class="nav-link dropdown-toggle" dropdownToggle role="button">
+                                                Requisitioning
+                                    </a>
+                                    <ul *dropdownMenu class="dropdown-menu">                                        
+                                        <li><a class="dropdown-item" routerLink="/requisitioning/orderguides">Order Guides</a></li>
+                                        <li><a class="dropdown-item" routerLink="/requisitioning/requisitions">Requisitions</a><li></li>
+                                    </ul>
+                            </li>
+                            
+                            <li dropdown class="nav-item">
+                                    <a class="nav-link dropdown-toggle" dropdownToggle role="button">
+                                            Inventory
+                                    </a>
+                                <ul *dropdownMenu class="dropdown-menu">
+                                        <li><a class="dropdown-item" routerLink="/inventory/itemcatalog">Item Catalog</a></li>
+                                        <li><a class="dropdown-item" routerLink="/inventory/iteminventory">Item Inventory</a></li>
+                                        <li><a class="dropdown-item" routerLink="/inventory/receiving">Receiving</a></li>
+                                </ul>
+                            </li>
+
+                            <li dropdown class="nav-item">
+                                        <a class="nav-link dropdown-toggle" dropdownToggle role="button">
+                                                Purchasing
+                                        </a>
+                                        <ul *dropdownMenu class="dropdown-menu">
+                                            <li><a class="dropdown-item" routerLink="/purchasing/vendors">Vendors</a></li>
+                                            <li><a class="dropdown-item" routerLink="/purchasing/purchaseorders">Purchase Orders</a></li>                                        
+                                        </ul>
+                                </li>
+
+                            <li dropdown class="nav-item">
+                                        <a class="nav-link dropdown-toggle" dropdownToggle role="button">
+                                                Payments
+                                        </a>
+                                        <ul *dropdownMenu class="dropdown-menu">
+                                            <li><a class="dropdown-item" routerLink="/payments/invoices">Invoices</a></li>
+                                            <li><a class="dropdown-item" routerLink="/payments/exceptions">Exceptions</a></li>                                                                                    
+                                        </ul>
+                                </li>
+
+                                <li dropdown class="nav-item">
+                                                <a class="nav-link dropdown-toggle" dropdownToggle role="button">
+                                                        Budget
+                                                </a>
+                                                <ul *dropdownMenu class="dropdown-menu">
+                                                       <li> <a class="dropdown-item" target="_blank" href="http://s2qiinsweb1.qains.premierinc.com:9090/">Budget</a></li>
+                                                </ul>
+                                </li>
+
+                            <li dropdown class="nav-item">
+                                    <a class="nav-link dropdown-toggle" dropdownToggle role="button">
+                                            Finance
+                                    </a>
+                                    <ul *dropdownMenu class="dropdown-menu">
+                                                <li> <a class="dropdown-item" target="_blank" href="https://c3tufireball1.premierinc.com:8443/payforperformance">Dashboards</a></li>
+                                    </ul>
+                            </li>                            
+                            
+                                <li dropdown class="nav-item">
+                                                <a class="nav-link dropdown-toggle" dropdownToggle role="button">
+                                                        Contract Management
+                                                </a>
+                                                <ul *dropdownMenu class="dropdown-menu">
+                                                       <li> <a class="dropdown-item" href="http://c12qiapp01/ematerials/temp/AWBQA.html" target="_blank">SCM</a></li>
+                                                       <li> <a class="dropdown-item" href="https://productsearchqa2-cloud.premierinc.com/catalog/catalog" target="_blank">Contract Catalog</a></li>
+                                                </ul>
+                                </li>                                   
+                                <li dropdown class="nav-item">
+                                                <a class="nav-link dropdown-toggle" dropdownToggle role="button">
+                                                        Administration
+                                                </a>
+                                                <ul *dropdownMenu class="dropdown-menu">
+                                                       <li> <a class="dropdown-item" routerLink="/administration/users">Users</a></li>
+                                                       <li> <a class="dropdown-item" routerLink="/administration/settings">Settings</a></li>                                            
+                                                       <li> <a class="dropdown-item" routerLink="/administration/monitoring">Monitoring</a></li>
+                                                </ul>
+                                </li>
+                    </ul>
+            </div>
+    </nav>     
+</div>
+
+</header>

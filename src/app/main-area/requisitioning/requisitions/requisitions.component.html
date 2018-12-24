@@ -1,0 +1,78 @@
+<!-- Breadcrumb Start --> 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-white">
+      <li class="breadcrumb-item"><a [routerLink]="['']">Home</a></li>
+      <li class="breadcrumb-item"><a [routerLink]="['/requisitioning']">Requisitioning</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Requisitions</li>
+    </ol>
+</nav>
+<!-- Breadcrumb End -->
+
+<div class="container-fluid">            
+              <div class="row pb-1">
+                <div class="col-md-2">
+                    <h5 class="pt-1">Requisitions </h5>
+                </div>
+              <!--<div class="col-md-10">
+                  <button class="btn btn-sm btn-primary">Create Order Guide</button>
+              </div>-->
+            </div>
+            
+<!-- Requisitions Table End -->             
+<p-table #dt [columns]="cols" [value]="requisitions" [resizableColumns]="true"  
+    [paginator]="true" [rows]="15" [totalRecords]="totalRequisitionsCount"
+    [lazy]="true" (onLazyLoad)="lazyLoadRequisitions($event)" [loading]="loading">   
+
+<ng-template pTemplate="header" let-columns>
+  <tr>    
+      <th *ngFor="let col of columns" pResizableColumn [pSortableColumn]="col.field">
+          {{col.header}}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+      </th>        
+  </tr>
+  <!-- <tr>
+      <th *ngFor="let col of columns">
+          <div *ngIf="col.field==='id'" style="text-align: left">                          
+              <input placeholder="Lookup" pInputText type="text" (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+              <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+          </div>
+      </th>                              
+  </tr> -->
+</ng-template>
+<ng-template pTemplate="body" let-requisition let-columns="columns">
+  <tr>
+      <!-- <td *ngFor="let col of columns">
+              {{requisition[col.field]}}
+      </td> -->        
+      <td class="ui-resizable-column">
+         <a class="text-dark" [routerLink]="requisition.requisitionNo" [queryParams]="{lines:requisition.totalLines}">{{requisition.requisitionNo}}</a>            
+        </td>
+      <td class="ui-resizable-column">{{requisition.reqDescription}}</td>
+      <td class="ui-resizable-column">{{requisition.totalLines>0?requisition.totalLines:0}}</td>
+      <td class="ui-resizable-column">
+        <div class="checkbox checkbox-primary">
+        <input id="allowbackOrder{{requisition.id}}"type="checkbox" disabled checked="{{requisition.punchoutOrderYN =='1'?true:null}}">              
+        <label for="allowbackOrder{{requisition.id}}"></label>
+        </div>             
+      </td>  
+      <td class="border-0 bg-white">          
+          <a title="delete requisition" (click)="confirm(requisition.requisitionNo)" class="text-secondary"><i class="fa fa-trash fa-lg"></i></a>
+          <a title="edit requisition" class="text-secondary px-1" (click)="editRequisitionDialog()"><i class="fa fa-pencil fa-lg"></i></a>
+      </td>                
+  </tr>
+</ng-template>
+</p-table>
+<!-- Requisitions Table End -->
+<!-- Order Guide Edit Dialog Start -->
+<p-dialog header="Edit Requisition" [(visible)]="displayEditDialog" modal="modal" [responsive]="true" [width]="1000" [minWidth]="200" [minY]="50">                  
+        <app-requisition-details></app-requisition-details>          
+</p-dialog>
+<!-- Order Guide Edit Dialog End -->
+
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" #cd>
+        <p-footer>
+            <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+            <button type="button" pButton icon="fa-check" label="Yes" (click)="cd.accept()"></button>
+        </p-footer>
+    </p-confirmDialog>
+</div>

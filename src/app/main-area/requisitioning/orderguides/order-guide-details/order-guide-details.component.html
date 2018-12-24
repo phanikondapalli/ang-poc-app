@@ -1,0 +1,109 @@
+<p-growl [(value)]="msgs" [immutable]="false"></p-growl>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 mx-auto">
+      <form>
+        <div class="form-group row">
+          <label for="orgId" class="col-sm-2 col-form-label col-form-label-sm">Organization</label>
+          <div class="col-sm-4">
+            <input type="text" [attr.disabled]="ordGuide?.org.length>0?'':null" class="form-control form-control-sm" id="orgId" [ngModel]="ordGuide?.org"
+              (ngModelChange)="ordGuide.org = $event" name="orgId" placeholder="Org Id">
+          </div>
+          <label for="OrgName" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
+          <div class="col-sm-4">
+            <input type="text" [attr.disabled]="ordGuide?.orgDesc.length>0?'':null" class="form-control form-control-sm" id="OrgName"
+              [ngModel]="ordGuide?.orgDesc" name="OrgName" placeholder="Org Name">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="deptId" class="col-sm-2 col-form-label col-form-label-sm">Department</label>
+          <div class="col-sm-4">
+            <input type="text" [attr.disabled]="ordGuide?.dept.length>0?'':null" class="form-control form-control-sm" id="deptId" [ngModel]="ordGuide?.dept"
+              (ngModelChange)="ordGuide.dept = $event" name="deptId" placeholder="Dept Id">
+          </div>
+          <label for="deptName" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
+          <div class="col-sm-4">
+            <input type="text" [attr.disabled]="ordGuide?.deptDesc.length>0?'':null" class="form-control form-control-sm" id="deptName"
+              [ngModel]="ordGuide?.deptDesc" name="deptName" placeholder="Dept Name">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="ordGuide?.id" class="col-sm-2 col-form-label col-form-label-sm">Order Guide*</label>
+          <div class="col-sm-4">
+            <input autocomplete="off" type="text" maxlength="10" id="{{ordGuide?.id}}" [attr.disabled]="action.toUpperCase()=='EDIT'?'':null" class="form-control form-control-sm" (ngModelChange)="ordGuide.orderGuide = $event" [ngModel]="ordGuide?.orderGuide"
+              name="ogId">
+          </div>
+          <label for="ogDesc" class="col-sm-2 col-form-label col-form-label-sm">Description*</label>
+          <div class="col-sm-4">
+            <input type="text" autocomplete="off" class="form-control form-control-sm" (ngModelChange)="ordGuide.orderGuideDesc = $event" [ngModel]="ordGuide?.orderGuideDesc"
+              name="ogDesc" id="ogDesc">
+          </div>
+        </div>
+        <div class="form-group row">          
+            <label class="col-sm-2 col-form-label col-form-label-sm" for="defResCode">Default Reason Code*</label>
+            <div class="col-sm-4">
+            <select class="form-control form-control-sm" id="defResCode" name="defResCode" (ngModelChange)="ordGuide.dftReasonCode = $event" [ngModel]="ordGuide?.dftReasonCode">
+              <option>OG</option>
+              <option>CA</option>
+              <option>PC</option>
+              <option>RP</option>
+              <option>SR</option>
+              <option>WD</option>
+            </select>
+          </div>
+          <label for="reasonDesc" class="col-sm-2 col-form-label col-form-label-sm">Reason Description</label>
+          <div class="col-sm-4">
+            <input autocomplete="off" type="text" class="form-control form-control-sm" [ngModel]="ordGuide?.reasonDescReq" id="reasonDesc" name="reasonDesc">
+          </div>           
+        </div>
+        <div class="form-group row">
+            <label for="ovrRdChgDept" class="col-sm-2 col-form-label col-form-label-sm">Override Charge Department</label>
+            <div class="col-sm-4">
+                <input autocomplete="off" type="text" class="form-control form-control-sm" (ngModelChange)="ordGuide.chrgDeptOvrd = $event" [ngModel]="ordGuide?.chrgDeptOvrd"
+                  name="ovrRdChgDept" id="ovrRdChgDept">
+            </div> 
+            <label for="ovrRdChargeOrg" class="col-sm-2 col-form-label col-form-label-sm">Override Charge Organization</label>
+            <div class="col-sm-4">
+              <input autocomplete="off" type="text" class="form-control form-control-sm" (ngModelChange)="ordGuide.chrgOrgOvrd = $event" [ngModel]="ordGuide?.chrgOrgOvrd"
+                name="ovrRdChargeOrg" id="ovrRdChargeOrg">
+            </div>
+          </div>
+        <div class="form-group row">
+          <label for="pickCycle" class="col-sm-2 col-form-label col-form-label-sm">Pick Cycle</label>
+          <div class="col-sm-4">
+            <input autocomplete="off" type="text" class="form-control form-control-sm" (ngModelChange)="ordGuide.pickCycleCode = $event" [ngModel]="ordGuide?.pickCycleCode"
+              name="pickCycle" id="pickCycle">
+          </div>
+          <label for="fundCode" class="col-sm-2 col-form-label col-form-label-sm">Fund Code</label>
+          <div class="col-sm-4">
+            <input autocomplete="off" type="text" class="form-control form-control-sm" (ngModelChange)="ordGuide.fundCode = $event" [ngModel]="ordGuide?.fundCode"
+              name="fundCode" id="fundCode">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="itmAlias" class="col-sm-2 form-check-label form-check-label-sm">Use Item Alias</label>
+          <div class="col-sm-4">
+            <input type="checkbox" checked="{{ordGuide?.useItmAliasYN =='1'?true:null}}" class="form-check-input-sm" id="itmAlias">
+          </div>
+          <label for="printAisle" class="col-sm-2 form-check-label form-check-label-sm">Print Aisle/Bin On Report</label>
+          <div class="col-sm-4">
+            <input type="checkbox" checked="{{ordGuide?.printAisleBinOnRptYN =='1'?true:null}}" class="form-check-input-sm" id="printAisle">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="invOnly" class="col-sm-2 form-check-label form-check-label-sm">Inventory Only</label>
+          <div class="col-sm-4">
+            <input type="checkbox" checked="{{ordGuide?.inventoryOnlyYN =='1'?true:null}}" class="form-check-input-sm" id="invOnly">
+          </div>
+          <label for="alwBakOrd" class="col-sm-2 form-check-label form-check-label-sm">Allow Backorder</label>
+          <div class="col-sm-4">
+            <input type="checkbox" checked="{{ordGuide?.allowBackordYN =='1'?true:null}}" class="form-check-input-sm" id="alwBakOrd">
+          </div>
+        </div>
+        <button type="button" (click)="saveOrderGuideDetails()" class="btn btn-primary px-4 mx-auto d-block">Save</button>
+      </form>
+    </div>
+  </div>
+</div>

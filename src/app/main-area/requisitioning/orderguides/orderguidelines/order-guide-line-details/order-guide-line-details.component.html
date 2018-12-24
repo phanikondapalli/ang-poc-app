@@ -1,0 +1,170 @@
+<div class="container-fluid">
+  <div class="row">
+      <div class="col-md-12 mx-auto">
+          <form>
+              <div class="form-group row">
+                  <label for="orgId" class="col-sm-2 col-form-label col-form-label-sm">Organization</label>
+                  <div class="col-sm-4">
+                    <input type="text" [attr.disabled]="line?.org.length>0?'':null" (ngModelChange)="line.org = $event" [ngModel]="line?.org" class="form-control form-control-sm" name="orgId" id="orgId" placeholder="Org Id">
+                  </div>
+                  <label for="OrgName" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
+                  <div class="col-sm-4">
+                    <input type="text" [attr.disabled]="line?.org.length>0?'':null" (ngModelChange)="line.org = $event" [ngModel]="line?.org" class="form-control form-control-sm" name="OrgName" id="OrgName" placeholder="Org Name">
+                  </div>
+              </div>
+              <div class="form-group row">
+                  <label for="deptId" class="col-sm-2 col-form-label col-form-label-sm">Department</label>
+                  <div class="col-sm-4">
+                    <input type="text" [attr.disabled]="line?.dept.length>0?'':null" (ngModelChange)="line.dept = $event" [ngModel]="line?.dept" class="form-control form-control-sm" name="deptId" id="deptId" placeholder="Dept Id">
+                  </div>
+                  <label for="deptName" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
+                  <div class="col-sm-4">
+                    <input type="text" [attr.disabled]="line?.dept.length>0?'':null" (ngModelChange)="line.dept = $event" [ngModel]="line?.dept" class="form-control form-control-sm" name="deptName" id="deptName" placeholder="Dept Name">
+                  </div>
+              </div>              
+              <p-tabView>
+                  <p-tabPanel header="General">
+                    
+                      <div class="form-group row">
+                          <label for="lineNum" class="col-sm-2 col-form-label col-form-label-sm">Line Number</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.lineNum = $event" [ngModel]="line?.lineNum" class="form-control form-control-sm" name="lineNum" id="lineNum" >
+                          </div>
+                          <label for="alwBakOrd" class="col-sm-2 form-check-label form-check-label-sm">Allow Backorder</label>
+                          <div class="col-sm-4">
+                            <input type="checkbox" checked="{{line?.allowBackordYN =='1'?true:null}}" 
+                            class="form-check-input-sm" id="alwBakOrd">
+                          </div>
+                      </div>
+
+                      <div class="form-group row">
+                          <label for="suppOrg" class="col-sm-2 col-form-label col-form-label-sm">Supply Organization*</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.supplyingOrg = $event" [ngModel]="line?.supplyingOrg" class="form-control form-control-sm" id="suppOrg" name="suppOrg" >
+                          </div>
+                          <label for="priority" class="col-sm-2 col-form-label col-form-label-sm">Priority</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.lineNum = $event" [ngModel]="line?.lineNum" class="form-control form-control-sm" id="priority" name="priority">
+                          </div>
+                      </div>
+
+                      <div class="form-group row">
+                          <label for="locDeliver" class="col-sm-2 col-form-label col-form-label-sm">Supply Asset Location*</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.supplyingAssetLoc = $event" [ngModel]="line?.supplyingAssetLoc" class="form-control form-control-sm" id="locDeliver" name="locDeliver">
+                          </div>
+                          <label for="dirDelivery" class="col-sm-2 form-check-label form-check-label-sm">Direct Delivery</label>
+                          <div class="col-sm-4">
+                            <input type="checkbox" checked="{{line?.allowBackordYN =='1'?true:null}}" class="form-check-input-sm" id="dirDelivery" name="dirDelivery">
+                          </div>
+                      </div>
+                    
+                      <div class="form-group row">
+                          <label for="itmNum" class="col-sm-2 col-form-label col-form-label-sm">Item Number*</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.itemNo = $event" [ngModel]="line?.itemNo" class="form-control form-control-sm" id="itmNum" name="itmNum">
+                          </div>
+                          <label for="parShelfLoc" class="col-sm-2 col-form-label col-form-label-sm">Par Shelf Location</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.buyFromLoc = $event" [ngModel]="line?.buyFromLoc" class="form-control form-control-sm" id="parShelfLoc" name="parShelfLoc">
+                          </div>
+                      </div>
+
+                      <div class="form-group row">
+                          <label for="desc" class="col-sm-2 col-form-label col-form-label-sm">Description</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.itemDesc = $event" [ngModel]="line?.itemDesc" class="form-control form-control-sm" id="desc" name="desc">
+                          </div>
+                          <label for="chrgToOrg" class="col-sm-2 col-form-label col-form-label-sm">Charge To Organization</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.chrgOrgOvrd = $event" [ngModel]="line?.chrgOrgOvrd" class="form-control form-control-sm" id="chrgToOrg" name="chrgToOrg">
+                          </div>
+                      </div>
+
+                      <div class="form-group row">
+                          <label for="itemType" class="col-sm-2 col-form-label col-form-label-sm">Item Type</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.itemTypeDesc = $event" [ngModel]="line?.itemTypeDesc" class="form-control form-control-sm" id="itemType" name="itemType">
+                          </div>
+                          <label for="chrgToDept" class="col-sm-2 col-form-label col-form-label-sm">Charge To Department</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.chrgOrgOvrd = $event" [ngModel]="line?.chrgOrgOvrd" class="form-control form-control-sm" id="chrgToDept" name="chrgToDept">
+                          </div>
+                      </div>
+
+                      <div class="form-group row">
+                          <label for="vendorItmNum" class="col-sm-2 col-form-label col-form-label-sm">Vendor Item Number</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.vendorItemNo = $event" [ngModel]="line?.vendorItemNo" class="form-control form-control-sm" id="vendorItmNum" name="vendorItmNum">
+                          </div>
+                          <label for="ovrrdChrgOrg" class="col-sm-2 col-form-label col-form-label-sm">Override Charge Organization</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.chrgOrgOvrd = $event" [ngModel]="line?.chrgOrgOvrd" class="form-control form-control-sm" id="ovrrdChrgOrg" name="ovrrdChrgOrg">
+                          </div>                          
+                      </div>
+
+                      <div class="form-group row">
+                          <label for="uom" class="col-sm-2 col-form-label col-form-label-sm">Unit Of Measure</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.unitOfMeasure = $event" [ngModel]="line?.unitOfMeasure" class="form-control form-control-sm" id="uom" name="uom">
+                          </div>
+                          <label for="projCode" class="col-sm-2 col-form-label col-form-label-sm">Project Code</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.projectCode = $event" [ngModel]="line?.projectCode" class="form-control form-control-sm" id="projCode" name="projCode">
+                          </div>
+                      </div> 
+
+                      <div class="form-group row">
+                          <label for="estUnitCost" class="col-sm-2 col-form-label col-form-label-sm">Estimated Unit Cost</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.estUnitCost = $event" [ngModel]="line?.estUnitCost" class="form-control form-control-sm" id="estUnitCost" name="estUnitCost">
+                          </div>
+                          <label for="fundCode" class="col-sm-2 col-form-label col-form-label-sm">Fund Code</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.fundCode = $event" [ngModel]="line?.fundCode" class="form-control form-control-sm" id="fundCode" name="fundCode">
+                          </div>                       
+                      </div> 
+                  <div class="form-group row">
+                      <label for="estExtCost" class="col-sm-2 col-form-label col-form-label-sm">Estimated Extended Cost</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.estExtendedCost = $event" [ngModel]="line?.estExtendedCost" class="form-control form-control-sm" id="estExtCost" name="estExtCost">
+                          </div>
+                      <label for="bypassQtyAdj" class="col-sm-2 col-form-label col-form-label-sm">Bypass Quantity Adjustment on Import</label>
+                          <div class="col-sm-4">
+                            <input type="text" (ngModelChange)="line.allegianceYN = $event" [ngModel]="line?.allegianceYN" class="form-control form-control-sm" id="bypassQtyAdj" name="bypassQtyAdj">
+                          </div>                   
+                  </div> 
+                  
+                <div class="form-group row">                 
+                  <label for="hzrdMat" class="col-sm-2 form-check-label form-check-label-sm">Hazardous Material</label>
+                  <div class="col-sm-4">
+                    <input type="checkbox" checked="{{line?.hazdsMaterialYN =='1'?true:null}}" class="form-check-input-sm" id="hzrdMat">
+                  </div>
+              </div>                                                
+                  </p-tabPanel>
+                  <p-tabPanel header="Fin Reporting">
+                      <div class="form-group row">
+                          <label for="finRptFld1" class="col-sm-2 col-form-label col-form-label-sm">Fin Reporting 1</label>
+                              <div class="col-sm-4">
+                                <input type="text" (ngModelChange)="line.finRptFld1 = $event" [ngModel]="line?.finRptFld1" class="form-control form-control-sm" id="finRptFld1" name="finRptFld1">
+                              </div>                                            
+                      </div>
+                      <div class="form-group row">
+                          <label for="finRptFld2" class="col-sm-2 col-form-label col-form-label-sm">Fin Reporting 2</label>
+                              <div class="col-sm-4">
+                                <input type="text" (ngModelChange)="line.finRptFld2 = $event" [ngModel]="line?.finRptFld2" class="form-control form-control-sm" id="finRptFld2" name="finRptFld2">
+                              </div>                                            
+                      </div>
+                      <div class="form-group row">
+                          <label for="finRptFld3" class="col-sm-2 col-form-label col-form-label-sm">Fin Reporting 3</label>
+                              <div class="col-sm-4">
+                                <input type="text" (ngModelChange)="line.finRptFld3 = $event" [ngModel]="line?.finRptFld3" class="form-control form-control-sm" id="finRptFld13" name="finRptFld3">
+                              </div>                                            
+                      </div> 
+                  </p-tabPanel>
+              </p-tabView>                
+              <button type="button" (click)="updateLine()" class="btn btn-primary px-4 mx-auto d-block">Submit</button>
+          </form>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<p-growl [(value)]="msgs" [immutable]="false"></p-growl>
+<p-table #items [columns]="availableItemsCols" [value]="availableItems" [resizableColumns]="true" 
+                 [paginator]="true" [rows]="5" [totalRecords]="totalAvailableItemsCount"
+                 [loading]="loading" (onFilter)="filterRecs($event)">
+
+                 <ng-template pTemplate="caption">
+                        <div style="text-align: left">                                
+                            <span class="pr-5 text-align-bottom">Showing {{items.totalRecords}} items</span>
+                            <input type="text" pInputText size="30" placeholder="Search items" (input)="items.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                            <i class="fa fa-search" style="margin:4px 4px 0 0"></i>                                                
+                        </div>
+                </ng-template>
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th>Select</th>
+                            <ng-container *ngFor="let col of columns">
+                                <ng-container *ngIf="col.field=='id';else unSorted">
+                                    <th [pSortableColumn]="col.field">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                </ng-container>
+                                <ng-template #unSorted>
+                                    <th>
+                                        {{col.header}}
+                                    </th>
+                                </ng-template>
+                            </ng-container>
+                        </tr>
+
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item let-columns="columns">
+                        <tr>
+                            <td class="ui-resizable-column">
+                                <div class="checkbox checkbox-primary">
+                                    <input (click)="selectItemForAdd($event)" id="{{item.id}}" attr.data-item="{{item | json}}" type="checkbox" 
+                                    checked="{{itemsToAdd.get(item.id)?true:null}}">
+                                </div>
+                            </td>
+                            <td class="ui-resizable-column">{{item.itemNo}}</td>
+                            <td class="ui-resizable-column">{{item.itemDesc | lowercase}}</td>
+                            <td class="ui-resizable-column">{{item.itemTypeDesc | lowercase}}</td>
+                            <td class="ui-resizable-column">{{item.unitOfMeasure}}</td>
+                            <td class="ui-resizable-column">{{item.onHandQty}}</td>
+                            <td class="ui-resizable-column">{{item.estUnitCost}}</td>
+                            <td class="ui-resizable-column">{{item.mfrName | lowercase}}</td>
+                            <td class="ui-resizable-column">{{item.latexFreeYN==1?'Y':'N'}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>

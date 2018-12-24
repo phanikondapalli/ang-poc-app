@@ -1,0 +1,193 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-white">
+        <li class="breadcrumb-item">
+            <a [routerLink]="['']">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/requisitioning']">Requisitioning</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Order Guides</li>
+    </ol>
+</nav>
+<p-growl [(value)]="msgs" [immutable]="false"></p-growl>
+<div class="container-fluid">        
+            <div class="row pb-1 px-0">
+                <div class="col-md-6">
+                    <span class="pt-1 h5">Order Guides </span> 
+                    <a (click)="getOrderGuides()"> <i class="fa fa-refresh fa-lg" style="margin:4px 4px 0 0"></i></a>
+                </div>                  
+            </div>
+            <div class="row py-1">
+                    <div class="col-md-12">                        
+                        <button class="btn btn-sm btn-primary" (click)="createOrderGuidesDialog()">Create New</button>
+                    </div>                    
+            </div>  
+        <div>      
+        <p-table #dt [columns]="cols" [value]="orderGuides" [resizableColumns]="true" [paginator]="true"
+            [rows]="10" [totalRecords]="totalOrderGuidesCount" [loading]="loading" [rowsPerPageOptions]="[10,20,30]" (onFilter)="filterRecs($event)">            
+            <ng-template pTemplate="caption">
+                    <div style="text-align: left">                                
+                        <span class="pr-5 text-align-bottom">Showing {{dt.totalRecords}} order guides</span>
+                        <input type="text" pInputText size="30" placeholder="Search Order Guides" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                        <i class="fa fa-search" style="margin:4px 4px 0 0"></i>                                                
+                    </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                        <ng-container *ngFor="let col of columns">
+                                <ng-container *ngIf="col.field!='';else unSorted">
+                                    <th pResizableColumn [pSortableColumn]="col.field">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                </ng-container>
+                                <ng-template #unSorted>
+                                    <th pResizableColumn>
+                                        {{col.header}}
+                                    </th>
+                                </ng-template>
+                            </ng-container>
+
+                    <!-- <ng-container *ngFor="let col of columns">
+                        <th pResizableColumn [pSortableColumn]="col.field" pReorderableColumn>
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                    </ng-container> -->
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-i="rowIndex" let-orderGuide let-columns="columns">
+                <tr>
+                    <td class="ui-resizable-column">
+                        <a class="text-primary" (click)="showLinesAndDetails(i)">{{orderGuide.orderGuide}}</a>
+                    </td>
+                    <td class="ui-resizable-column">{{orderGuide.org}}</td>
+                    <td class="ui-resizable-column">{{orderGuide.dept}}</td>                    
+                    <td class="ui-resizable-column">{{orderGuide.orderGuideDesc}}</td>
+                    <td class="ui-resizable-column">{{orderGuide.totalLines>0?orderGuide.totalLines:0}}</td>
+                    <td class="ui-resizable-column">
+                        <div class="checkbox checkbox-primary">
+                            <input type="checkbox" disabled checked="{{orderGuide.allowBackordYN =='1'?true:null}}">                            
+                        </div>
+                    </td>                    
+                    <td class="border-0 bg-white">
+                        <a class="btn btn-secondary btn-sm" href="#" role="button">Create Requisition</a>                        
+                        <a title="delete order guide" class="text-secondary" (click)="confirm(orderGuide.orderGuide,orderGuide.id)">
+                            <i class="fa fa-trash fa-lg"></i>
+                        </a>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+<!-- Order guide details and lines dialog Start -->
+<p-dialog [(visible)]="displayDetailsDialog" header="order guide details" modal="modal" [responsive]="true" [width]="1200" [minWidth]="200"
+[minY]="50">        
+<app-orderguidelines *ngIf="displayDetailsDialog" [orderGuide]="filteredOGs && filteredOGs[orderGuideBeingEdited]" #orderGuideLines>
+        <p-growl [(value)]="orderGuideLines.msgs" [immutable]="false"></p-growl>
+</app-orderguidelines>
+</p-dialog>
+<!-- Order guide details and lines dialog Start -->
+
+<!-- Confirm Dialog for Delete Order Guide Start -->
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" #cd>
+        <p-footer>
+            <button type="button" pButton icon="fa-close" label="No" (click)="cd.reject()"></button>
+            <button type="button" pButton icon="fa-check" label="Yes" (click)="cd.accept()"></button>
+        </p-footer>
+</p-confirmDialog>
+<!-- Confirm Dialog for Delete Order Guide end --> 
+
+<!-- Workflow Dialog for Create Order Guide Start -->
+<p-dialog header="Create new order guide" [(visible)]="displayDialog" modal="modal" [responsive]="true" 
+        [width]="1200" [minWidth]="200" [minY]="50" (onHide)="resetNewOG($event)">        
+        <p-steps [activeIndex]="activeIndex" styleClass="steps-custom" [model]="items"></p-steps>    
+        <div *ngIf="activeIndex==0">        
+            <app-order-guide-details [orderGuide]="newOrderGuide" [action]="ogAction" [reset]="resetOG" (activeIndex)="updateIndex($event)" #details></app-order-guide-details>
+        </div>
+        <div *ngIf="activeIndex==1">            
+                <div class="row pt-3 px-0">
+                        <div class="col-md-3">
+                            <h5 class="pt-1">Available items</h5>
+                        </div>                    
+                </div>
+                <div class="row py-1">
+                        <div class="col-md-12">
+                            <!-- <span class="pr-5 text-align-bottom">Showing {{availableItems.totalAvailableItemsCount}} items</span> -->
+                            <button (click)="availableItems.AddItemsToOrderGuide()" class="btn btn-sm btn-primary {{availableItems.enableAddBtn}}">Add Items</button>
+                        </div>                    
+                </div>
+                <app-available-items [orderGuideId]="newOrderGuide && newOrderGuide.orderGuide" #availableItems>
+            </app-available-items> 
+            <div class="row py-1">                
+                <!--<div class="col-md-6">
+                        <button (click)="updateIndex(0);updateAction('edit')" class="btn btn-primary btn-md pull-right">prev</button>
+                </div>-->
+                <div class="col-md-6">
+                        <button (click)="updateIndex(2);getOrderGuideLines()" class="pull-right btn btn-primary btn-md">Next</button>
+                </div>
+            </div>               
+        </div>
+        <div *ngIf="activeIndex==2">
+            <div class="alert alert-info" role="alert">
+                   Review the Order Guide details. You can always come back and manage them later.
+                </div>
+            <div class="row py-1">
+                    <div class="col-md-6">Org: {{newOrderGuide.org}}</div>
+                    <div class="col-md-6">Dept: {{newOrderGuide.dept}}</div>
+                </div>
+            <div class="row py-1">
+                <div class="col-md-6">OrderGuide: {{newOrderGuide.orderGuide}}</div>
+                <div class="col-md-6">Description: {{newOrderGuide.orderGuideDesc}}</div>
+            </div>
+            <!-- Order Guide lines Start -->             
+<ng-container *ngIf="newOGLines?.length==0">
+        <div class="alert alert-info" role="alert">
+            OrderGuide <strong> {{newOrderGuide.orderGuide}} </strong> doesnt have any lines. Please select items below to add lines.
+        </div>
+</ng-container>
+<p-table #dt [columns]="oglCols" [value]="newOGLines" [resizableColumns]="true" [paginator]="true" [rows]="5"
+             [totalRecords]="newOGLinesCount" [loading]="loading">             
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <ng-container *ngFor="let col of columns">                            
+                                <th pResizableColumn>
+                                    {{col.header}}
+                                </th>
+                        </ng-container>
+                    </tr>                    
+                </ng-template>                                
+                <ng-template pTemplate="body" let-orderGuideLine let-i="rowIndex" let-columns="columns">
+                    <tr>                  
+                        <td class="ui-resizable-column">{{orderGuideLine.itemNo}}</td>
+                        <td class="ui-resizable-column">
+                            <ng-container *ngIf="orderGuideLine.itemPicURL; else noImage">
+                                <img class="img-fluid img-thumbnail" style="max-height:80px;" [src]="orderGuideLine.itemPicURL" />
+                            </ng-container>
+                            <ng-template #noImage>
+                                <img class="img-fluid img-thumbnail" style="max-height:80px;" src="../../../../assets/no_image_icon.jpg" />
+                            </ng-template>
+                        </td>
+                        <td class="ui-resizable-column">{{orderGuideLine.mfrItemNo}}</td>
+                        <td class="ui-resizable-column">{{orderGuideLine.vendorItemNo}}</td>
+                        <td class="ui-resizable-column">{{orderGuideLine.itemDesc | lowercase}}</td>
+                       <!-- <td class="ui-resizable-column">{{orderGuideLine.unitOfMeasure}}</td> -->
+                        <td class="ui-resizable-column">{{orderGuideLine.unitOfMeasure}}</td>
+                        <td class="ui-resizable-column">{{orderGuideLine.parLevelQty}}</td>
+                        <td class="ui-resizable-column">{{orderGuideLine.estUnitCost}}</td>
+                    </tr>                    
+                </ng-template>                                   
+            </p-table>
+    <!-- Order guide lines end -->  
+            <div class="row py-1">                
+                    <div class="col-md-6">
+                            <button (click)="updateIndex(1)" class="btn btn-primary btn-md pull-right">Prev</button>
+                    </div>
+                    <div class="col-md-6">
+                            <button (click)="hideDialog()" class="btn btn-primary btn-md">Finish</button>
+                    </div>
+                </div>
+        </div>
+        </p-dialog>
+<!-- Workflow Dialog for Create Order Guide Start -->
+</div>
